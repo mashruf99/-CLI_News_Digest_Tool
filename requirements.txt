@@ -1,0 +1,6 @@
+python-dotenv
+requests
+wikipedia
+qrcode[pil]
+tabulate
+textstat
