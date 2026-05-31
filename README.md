@@ -11,29 +11,29 @@
 
 ## 📌 Project Overview
 
-**CLI News Digest** একটি Python-based command-line tool যা user-এর দেওয়া যেকোনো topic-এর উপর Wikipedia থেকে তথ্য এনে terminal-এ সুন্দরভাবে present করে। সাথে article-এর readability score এবং একটি QR code তৈরি করে।
+**CLI News Digest** A Python-based command-line tool that fetches information from Wikipedia on any topic provided by the user and presents it nicely in the terminal. It also generates the article's readability score and a QR code.
 
-এটি একটি **Level 1 Beginner Project** — Python-এর real-world library ব্যবহার শিখতে এবং CLI tool তৈরির basics বুঝতে আদর্শ।
+This is a **Level 1 Beginner Project** — ideal for learning to use real-world Python libraries and understanding the basics of creating a CLI tool.
 
 ---
 
 ## 🎯 Product Requirements (PRD)
 
 ### Problem Statement
-নতুন কোনো topic সম্পর্কে দ্রুত জানতে চাইলে browser খুলে Wikipedia-তে যেতে হয়। Developer-দের জন্য terminal থেকেই এই কাজটা করার কোনো সহজ tool নেই।
+If you want to quickly learn about a new topic, you have to open a browser and go to Wikipedia. There is no easy tool for developers to do this from the terminal.
 
 ### Target Users
-- Python শিখছেন এমন beginners
-- Terminal-centric workflow পছন্দ করেন এমন developers
-- Quick reference এর জন্য Wikipedia ব্যবহার করেন এমন যেকেউ
+- Beginners who are learning Python.
+- Developers who prefer a terminal-centric workflow.
+- Anyone uses Wikipedia for quick reference.
 
 ### Goals
-- [x] Terminal থেকে Wikipedia summary পড়া যাবে
-- [x] Article কতটা কঠিন তা readability score দিয়ে বোঝা যাবে
-- [x] QR code স্ক্যান করে মোবাইলে সম্পূর্ণ article পড়া যাবে
-- [x] `.env` দিয়ে configuration manage করা যাবে
+- [x] The Wikipedia summary can be read from the terminal
+- [x] You can understand how difficult an article is by its readability score
+- [x] By scanning the QR code, the complete article can be read on mobile/any other device.
+- [x] Configuration can be managed using `.env` .
 
-### Non-Goals (Scope বাইরে)
+### Non-Goals (Outside of Scope)
 - GUI বা web interface নেই
 - Multiple language support নেই (English Wikipedia only)
 - Article save/export feature নেই (v1 scope-এ)
@@ -44,12 +44,12 @@
 
 | Feature | Description | Library |
 |---------|-------------|---------|
-| **Wikipedia Fetch** | Topic দিয়ে 5-sentence summary, URL, categories আনে | `wikipedia` |
-| **Table Formatting** | `fancy_grid` format-এ সুন্দর terminal table | `tabulate` |
-| **QR Code** | Article URL থেকে PNG QR code তৈরি ও save | `qrcode[pil]` |
+| **Wikipedia Fetch** | Brings a 5-sentence summary with the topic, URL, and categories | `wikipedia` |
+| **Table Formatting** | Beautiful terminal table in `fancy_grid` format | `tabulate` |
+| **QR Code** | Create and save PNG QR code from Article URL | `qrcode[pil]` |
 | **Readability Score** | Flesch score, grade level, word count | `textstat` |
-| **Env Management** | App config `.env` ফাইলে রাখা | `python-dotenv` |
-| **Auto Disambiguation** | Multiple results হলে auto-suggest করে | built-in |
+| **Env Management** | Keep app config in the `.env` file | `python-dotenv` |
+| **Auto Disambiguation** | If there are multiple results, it auto-suggests | built-in |
 
 ---
 
@@ -84,11 +84,11 @@ Python 3.8+
 ## ⚙️ Installation
 
 ### Prerequisites
-- Python 3.8 বা তার উপরে
+- Python 3.8 or above
 - pip (Python package manager)
 - Git
 
-### Step 1 — Clone করো
+### Step 1 — Cloning 
 
 ```bash
 git clone https://github.com/your-username/cli-news-digest.git
@@ -98,10 +98,8 @@ cd cli-news-digest
 ### Step 2 — Virtual Environment
 
 ```bash
-# তৈরি করো
 python -m venv venv
 
-# Activate করো
 # Windows:
 venv\Scripts\activate
 
@@ -115,13 +113,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Step 4 — .env ফাইল তৈরি করো
+### Step 4 — .env 
 
 ```bash
 cp .env.example .env
 ```
 
-`.env` ফাইলের ভেতরে:
+`.env` Inside .env:
 
 ```env
 APP_NAME=CLI News Digest
@@ -136,7 +134,7 @@ python news_digest.py
 
 ---
 
-## 🚀 Usage
+##  Usage
 
 ```
 $ python news_digest.py
@@ -145,9 +143,9 @@ $ python news_digest.py
   CLI News Digest v1.0
 ==================================================
 
-🔍 কোন topic সম্পর্কে জানতে চাও? (English-এ লেখো): Black hole
+ Which topic do you want to know about? (Write in English): Black hole
 
-⏳ 'Black hole' সম্পর্কে Wikipedia থেকে তথ্য আনা হচ্ছে...
+ Information is being taken from Wikipedia about 'Black hole.'..
 
 📰 ARTICLE INFORMATION
 ╒══════════════╤════════════════════════════════════════════════════════╕
@@ -167,15 +165,15 @@ $ python news_digest.py
 │ Grade Level      │ 13.2     │
 │ Word Count       │ 203      │
 │ Sentences        │ 9        │
-│ Difficulty       │ Hard 🔴  │
+│ Difficulty       │ Hard     │
 ╘══════════════════╧══════════╛
 
-📱 QR CODE GENERATION
-✅ QR Code সফলভাবে তৈরি হয়েছে: Black_hole_qr.png
-🔗 Article URL: https://en.wikipedia.org/wiki/Black_hole
+ QR CODE GENERATION
+ QR Code created successfully: Black_hole_qr.png
+ Article URL: https://en.wikipedia.org/wiki/Black_hole
 
 ==================================================
-✨ Done! QR code স্ক্যান করলে সরাসরি article-এ যাবে।
+ Done! If you scan the QR code, it will go directly to the article।
 ==================================================
 ```
 
@@ -228,7 +226,7 @@ VERSION=1.0.0
 ### v1.1 (Planned)
 - [ ] Multiple language support (Bengali, Hindi)
 - [ ] Summary export to `.txt` file
-- [ ] Search history সংরক্ষণ
+- [ ] Search history preserve
 
 ### v2.0 (Future)
 - [ ] News API integration
@@ -249,11 +247,11 @@ VERSION=1.0.0
 
 ## License
 
-MIT License — বিস্তারিত [LICENSE](LICENSE) ফাইলে।
+MIT License — Details [LICENSE](LICENSE) ।
 
 ---
 
-## 👤 Author
+##  Author
 
 **Your Name**
 - GitHub: [@mashruf99](https://github.com/mashruf99)
