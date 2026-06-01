@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>CLI News Digest</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #ffffff;
+      color: #111111;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-width: 900px;
+    }
+
+    /* Fixed-width page wrapper */
+    .page-wrap {
+      width: 900px;
+      margin: 0 auto;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #fff; }
+    ::-webkit-scrollbar-thumb { background: #ccc; }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffff;
+      border-bottom: 1px solid #111;
+      height: 52px;
+    }
+
+    .nav-inner {
+      width: 900px;
+      margin: 0 auto;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+    }
+
+    .nav-logo {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #111;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: Arial, sans-serif;
+      color: #666;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: #111; }
+
+    .nav-badge {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #111;
+      border: 1px solid #111;
+      padding: 2px 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 90px 2.5rem 70px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .hero-tag {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #888;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 3.4rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1.4rem;
+      color: #111;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-desc {
+      font-size: 17px;
+      color: #555;
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: #111;
+      color: #fff;
+      border: 1px solid #111;
+    }
+
+    .btn-primary:hover { background: #333; }
+
+    .btn-ghost {
+      background: transparent;
+      color: #111;
+      border: 1px solid #111;
+    }
+
+    .btn-ghost:hover { background: #111; color: #fff; }
+
+    /* TERMINAL */
+    .terminal-wrap {
+      padding: 60px 2.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .terminal {
+      background: #111;
+      border: 1px solid #111;
+      overflow: hidden;
+    }
+
+    .terminal-bar {
+      background: #222;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #333;
+    }
+
+    .tbar-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #444;
+    }
+
+    .tbar-title {
+      flex: 1;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #666;
+      letter-spacing: 0.08em;
+    }
+
+    .terminal-body {
+      padding: 1.8rem 2rem;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      line-height: 2;
+      color: #ccc;
+    }
+
+    .t-line { display: flex; gap: 8px; }
+    .t-prompt { color: #fff; flex-shrink: 0; }
+    .t-cmd { color: #eee; }
+    .t-out { color: #888; padding-left: 16px; }
+    .t-out.hi { color: #eee; }
+    .t-table { padding-left: 16px; color: #666; font-size: 12px; }
+
+    .cursor {
+      display: inline-block;
+      width: 8px; height: 13px;
+      background: #fff;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* STATS */
+    .stats-strip {
+      border-bottom: 1px solid #ddd;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-cell {
+      padding: 2.5rem;
+      text-align: center;
+      border-right: 1px solid #ddd;
+    }
+
+    .stat-cell:last-child { border-right: none; }
+
+    .stat-num {
+      display: block;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .stat-label {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #888;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 70px 2.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .section-label {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.6rem;
+    }
+
+    h2 {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-sub {
+      color: #888;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid #ddd;
+    }
+
+    .feature-card {
+      padding: 1.8rem;
+      border-right: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      transition: background 0.15s;
+    }
+
+    .feature-card:hover { background: #f9f9f9; }
+
+    .feat-marker {
+      width: 24px;
+      height: 1px;
+      background: #111;
+      margin-bottom: 1.2rem;
+    }
+
+    .feat-title {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 0.5rem;
+    }
+
+    .feat-desc {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.7;
+      font-family: Arial, sans-serif;
+    }
+
+    .feat-tag {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      color: #888;
+      border: 1px solid #ddd;
+      padding: 2px 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* STACK */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid #ddd;
+    }
+
+    .stack-item {
+      padding: 1.4rem 1.6rem;
+      border-right: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      transition: background 0.15s;
+    }
+
+    .stack-item:hover { background: #f9f9f9; }
+
+    .stack-name {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      letter-spacing: 0.02em;
+    }
+
+    .stack-desc {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #888;
+      margin-top: 3px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* STEPS */
+    .steps { display: flex; flex-direction: column; }
+
+    .step {
+      display: flex;
+      gap: 2rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-num {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #aaa;
+      letter-spacing: 0.1em;
+      width: 28px;
+      flex-shrink: 0;
+      padding-top: 4px;
+    }
+
+    .step-content { flex: 1; }
+
+    .step-title {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 8px;
+    }
+
+    .code-block {
+      width: 620px;
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      padding: 12px 16px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #333;
+      position: relative;
+      line-height: 1.8;
+    }
+
+    .code-block .comment { color: #999; }
+
+    .copy-btn {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      background: #fff;
+      border: 1px solid #ddd;
+      color: #888;
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      padding: 3px 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .copy-btn:hover { border-color: #111; color: #111; }
+
+    /* FOOTER */
+    footer {
+      padding: 2.5rem;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: #888;
+      letter-spacing: 0.05em;
+      border-top: 1px solid #ddd;
+    }
+
+    footer a { color: #111; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">CLI News Digest</div>
+    <ul class="nav-links">
+      <li><a href="#features" onclick="smoothScroll(event,'features')">Features</a></li>
+      <li><a href="#stack" onclick="smoothScroll(event,'stack')">Stack</a></li>
+      <li><a href="#install" onclick="smoothScroll(event,'install')">Install</a></li>
+      <li><a href="https://github.com/mashruf99/-CLI_News_Digest_Tool" target="_blank">GitHub</a></li>
+    </ul>
+    <span class="nav-badge">v1.0.0</span>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="hero">
+    <div class="hero-tag">Open Source &mdash; Python &mdash; CLI Tool</div>
+    <h1>Wikipedia.<br>Terminal-first.<br>Zero friction.</h1>
+    <p class="hero-desc">
+      Get Wikipedia summaries, readability analysis, and QR codes for any topic directly from the command line — all in one place. No browser required.
+    </p>.
+    </p>
+    <div class="hero-ctas">
+      <a href="#install" onclick="smoothScroll(event,'install')" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/mashruf99/-CLI_News_Digest_Tool" target="_blank" class="btn btn-ghost">View on GitHub</a>
+    </div>
+  </div>
+
+  <!-- TERMINAL DEMO -->
+  <div class="terminal-wrap">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="tbar-dot"></div>
+        <div class="tbar-dot"></div>
+        <div class="tbar-dot"></div>
+        <div class="tbar-title">bash &mdash; cli-news-digest</div>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">~/projects $</span><span class="t-cmd">&nbsp;python news_digest.py</span></div>
+        <br>
+        <div class="t-out">==================================================</div>
+        <div class="t-out hi">&nbsp;&nbsp;CLI News Digest v1.0</div>
+        <div class="t-out">==================================================</div>
+        <br>
+        <div class="t-out">Topic: <span style="color:#eee">Python programming language</span></div>
+        <div class="t-out">Fetching from Wikipedia...</div>
+        <br>
+        <div class="t-out hi">ARTICLE INFORMATION</div>
+        <div class="t-table">+==============+========================================+</div>
+        <div class="t-table">| Title        | Python (programming language)          |</div>
+        <div class="t-table">| Words        | 187                                    |</div>
+        <div class="t-table">| Categories   | Dynamic, Open-source, Interpreted      |</div>
+        <div class="t-table">+==============+========================================+</div>
+        <br>
+        <div class="t-out hi">READABILITY ANALYSIS</div>
+        <div class="t-table">+==================+============+</div>
+        <div class="t-table">| Flesch Score     | 42.3       |</div>
+        <div class="t-table">| Grade Level      | 12.1       |</div>
+        <div class="t-table">| Difficulty       | Hard       |</div>
+        <div class="t-table">+==================+============+</div>
+        <br>
+        <div class="t-out hi">QR Code saved: Python_qr.png</div>
+        <div class="t-line"><span class="t-prompt">~/projects $</span><span class="cursor"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stat-cell">
+      <span class="stat-num">4</span>
+      <div class="stat-label">Core Libraries</div>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num">&lt;50</span>
+      <div class="stat-label">Lines of Setup</div>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num">0</span>
+      <div class="stat-label">Paid API Keys</div>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num">~3s</span>
+      <div class="stat-label">Avg Response</div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section-label">What it does</div>
+    <h2>Core Features</h2>
+    <p class="section-sub">Everything you need for a CLI news digest</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-marker"></div>
+        <div class="feat-title">Wikipedia Summary Fetch</div>
+        <div class="feat-desc">Takes user input and fetches a 5-sentence summary, article URL, and top categories using the Wikipedia Python library.</div>
+        <span class="feat-tag">wikipedia</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-marker"></div>
+        <div class="feat-title">Formatted Table Output</div>
+        <div class="feat-desc">Displays article information and readability metrics in a clean fancy_grid format using the Tabulate library.</div>
+        <span class="feat-tag">tabulate</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-marker"></div>
+        <div class="feat-title">QR Code Generator</div>
+        <div class="feat-desc"> Generates a PNG QR code from the article URL and saves it in the project folder. Scan it with a mobile device to access the article instantly.</div>
+        <span class="feat-tag">qrcode</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-marker"></div>
+        <div class="feat-title">Readability Score</div>
+        <div class="feat-desc"> Calculates and displays Flesch Reading Ease, Kincaid Grade Level, word count, and difficulty rating using the Textstat library.</div>
+        <span class="feat-tag">textstat</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-marker"></div>
+        <div class="feat-title">.env Configuration</div>
+        <div class="feat-desc">Configures app name, version, and other settings using python-dotenv. Makes it easy to add future API keys.</div>
+        <span class="feat-tag">python-dotenv</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-marker"></div>
+        <div class="feat-title">Smart Disambiguation</div>
+        <div class="feat-desc">Automatically identifies the most relevant page when multiple Wikipedia results are available.</div>
+        <span class="feat-tag">auto-suggest</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section id="stack">
+    <div class="section-label">Built with</div>
+    <h2>Tech Stack</h2>
+    <p class="section-sub">Fully open-source and completely free.</p>
+    <div class="stack-grid">
+      <div class="stack-item">
+        <div class="stack-name">Python 3.8+</div>
+        <div class="stack-desc">Core language</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">wikipedia</div>
+        <div class="stack-desc">Article fetching</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">tabulate</div>
+        <div class="stack-desc">Table formatting</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">qrcode[pil]</div>
+        <div class="stack-desc">QR generation</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">textstat</div>
+        <div class="stack-desc">Readability analysis</div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-name">python-dotenv</div>
+        <div class="stack-desc">Env management</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section id="install">
+    <div class="section-label">Quick Start</div>
+    <h2>Installation</h2>
+    <p class="section-sub">6 steps, 5 minutes to get started.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Clone the Repository</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            git clone https://github.com/your-username/cli-news-digest.git<br>
+            cd cli-news-digest
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Create Virtual Environment</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            python -m venv venv<br>
+            <span class="comment"># Windows:</span> venv\Scripts\activate<br>
+            <span class="comment"># Mac/Linux:</span> source venv/bin/activate
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Install Dependencies</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            pip install -r requirements.txt
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Create .env File</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <span class="comment"># .env</span><br>
+            APP_NAME=CLI News Digest<br>
+            VERSION=1.0.0
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-title">Run the Application</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            python news_digest.py
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">06</div>
+        <div class="step-content">
+          <div class="step-title">Enter a Topic</div>
+          <div class="code-block">
+            Topic: Artificial intelligence
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Open Source &mdash; MIT License</p>
+    <p style="margin-top:8px">
+      <a href="https://github.com/mashruf99" target="_blank">GitHub</a> &nbsp;&middot;&nbsp;
+      <a href="https://www.instagram.com/_mashruf_" onclick="smoothScroll(event,'install')">Docs</a> &nbsp;&middot;&nbsp;
+      <a href="mailto:bemashrufislam@gmail.com">Contact</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  function smoothScroll(e, id) {
+    e.preventDefault();
+    const target = document.getElementById(id);
+    if (!target) return;
+    const navHeight = document.querySelector('nav').offsetHeight;
+    const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+
+  function copyCode(btn) {
+    const block = btn.parentElement;
+    const text = block.innerText.replace('Copy\n', '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1800);
+    });
+  }
+</script>
+</body>
+</html>

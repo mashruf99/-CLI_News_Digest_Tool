@@ -1,6 +1,6 @@
-# 📟 CLI News Digest
+#  CLI News Digest
 
-> Command line থেকে যেকোনো topic-এ Wikipedia summary, readability analysis, এবং QR code — একটাই tool-এ।
+> From the command line, Wikipedia summary, readability analysis, and QR code for any topic — all in one tool.
 
 [![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00ffc8?style=flat-square)](LICENSE)
@@ -9,7 +9,7 @@
 
 ---
 
-## 📌 Project Overview
+##  Project Overview
 
 **CLI News Digest** A Python-based command-line tool that fetches information from Wikipedia on any topic provided by the user and presents it nicely in the terminal. It also generates the article's readability score and a QR code.
 
@@ -17,7 +17,7 @@ This is a **Level 1 Beginner Project** — ideal for learning to use real-world 
 
 ---
 
-## 🎯 Product Requirements (PRD)
+##  Product Requirements (PRD)
 
 ### Problem Statement
 If you want to quickly learn about a new topic, you have to open a browser and go to Wikipedia. There is no easy tool for developers to do this from the terminal.
@@ -34,13 +34,13 @@ If you want to quickly learn about a new topic, you have to open a browser and g
 - [x] Configuration can be managed using `.env` .
 
 ### Non-Goals (Outside of Scope)
-- GUI বা web interface নেই
-- Multiple language support নেই (English Wikipedia only)
+- GUI/web interface is not available
+- No Multiple language support  (English Wikipedia only)
 - Article save/export feature নেই (v1 scope-এ)
 
 ---
 
-## ✨ Features
+##  Features
 
 | Feature | Description | Library |
 |---------|-------------|---------|
@@ -53,7 +53,7 @@ If you want to quickly learn about a new topic, you have to open a browser and g
 
 ---
 
-## 🗂️ Project Structure
+##  Project Structure
 
 ```
 cli-news-digest/
@@ -68,7 +68,7 @@ cli-news-digest/
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ```
 Python 3.8+
@@ -81,7 +81,7 @@ Python 3.8+
 
 ---
 
-## ⚙️ Installation
+##  Installation
 
 ### Prerequisites
 - Python 3.8 or above
@@ -147,7 +147,7 @@ $ python news_digest.py
 
  Information is being taken from Wikipedia about 'Black hole.'..
 
-📰 ARTICLE INFORMATION
+ ARTICLE INFORMATION
 ╒══════════════╤════════════════════════════════════════════════════════╕
 │ Field        │ Details                                                │
 ╞══════════════╪════════════════════════════════════════════════════════╡
@@ -157,7 +157,7 @@ $ python news_digest.py
 │ Categories   │ Black holes, General relativity, Gravity               │
 ╘══════════════╧════════════════════════════════════════════════════════╛
 
-📊 READABILITY ANALYSIS
+ READABILITY ANALYSIS
 ╒══════════════════╤══════════╕
 │ Metric           │ Value    │
 ╞══════════════════╪══════════╡
@@ -179,7 +179,7 @@ $ python news_digest.py
 
 ---
 
-## 📁 requirements.txt
+##  requirements.txt
 
 ```txt
 python-dotenv
